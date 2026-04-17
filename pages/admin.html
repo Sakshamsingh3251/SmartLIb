@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SmartLib — Admin Dashboard</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="dash-layout">
+  <button class="mob-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo"><i class="fa-solid fa-building-columns"></i></div>
+      <div class="sidebar-name">Smart<span>Lib</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Admin Panel</div>
+      <a href="#" class="nav-item active" onclick="showSection('dashboard',this)"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="#" class="nav-item" onclick="showSection('seats',this)"><i class="fa-solid fa-chair"></i><span>Seat Manager</span></a>
+      <a href="#" class="nav-item" onclick="showSection('racks',this)"><i class="fa-solid fa-layer-group"></i><span>Rack Manager</span></a>
+      <a href="#" class="nav-item" onclick="showSection('books',this)"><i class="fa-solid fa-book"></i><span>Book Inventory</span></a>
+      <a href="#" class="nav-item" onclick="showSection('users',this)"><i class="fa-solid fa-users"></i><span>Active Users</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar" style="background:linear-gradient(135deg,#4f46e5,#6366f1)"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><div class="user-name" id="admNameDisplay">Admin</div><div class="user-role-badge">System Administrator</div></div>
+      </div>
+      <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+  </aside>
+
+  <div class="dash-main">
+    <div class="topbar">
+      <div class="topbar-left"><div class="page-title" id="pageTitle">Dashboard</div></div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" onclick="refreshDash()" title="Refresh"><i class="fa-solid fa-rotate-right"></i></button>
+        <button class="topbar-icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i></button>
+        <button class="topbar-icon-btn" onclick="logout()" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </div>
+
+    <div class="dash-content">
+
+      <!-- DASHBOARD -->
+      <div class="content-section active" id="section-dashboard">
+        <div class="section-header"><div><h1><i class="fa-solid fa-gauge-high"></i> Overview</h1><p id="dashTime">Loading…</p></div><button class="btn-action btn-action-blue" onclick="refreshDash()"><i class="fa-solid fa-rotate-right"></i> Refresh</button></div>
+        <div class="stats-row" id="seatStats"></div>
+        <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--text-muted);margin:24px 0 14px;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-book" style="color:var(--blue-500)"></i> Book Collection</h3>
+        <div class="stats-row" id="bookStats"></div>
+        <div class="overview-grid">
+          <div class="overview-card"><h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Reservations</h3><div id="recentRes"></div></div>
+          <div class="overview-card"><h3><i class="fa-solid fa-chart-bar"></i> Zone Utilisation</h3><div id="zoneUtil"></div></div>
+        </div>
+      </div>
+
+      <!-- SEAT MANAGER -->
+      <div class="content-section" id="section-seats">
+        <div class="section-header">
+          <div><h1><i class="fa-solid fa-chair"></i> Seat Manager</h1><p>Click any seat to update its status. Admins can override all reservations.</p></div>
+          <div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="admSeatSearch" placeholder="Search seat…" oninput="renderAdminSeats()"/></div>
+        </div>
+        <div class="legend"><span class="legend-item"><span class="legend-dot ld-green"></span>Available</span><span class="legend-item"><span class="legend-dot ld-yellow"></span>Reserved</span><span class="legend-item"><span class="legend-dot ld-red"></span>Occupied</span></div>
+        <div class="zone-tabs" id="admZoneTabs"></div>
+        <div class="seat-grid" id="admSeatGrid"></div>
+      </div>
+
+      <!-- RACK MANAGER -->
+      <div class="content-section" id="section-racks">
+        <div class="section-header"><div><h1><i class="fa-solid fa-layer-group"></i> Rack Manager</h1><p>All physical racks and their book contents.</p></div><button class="btn-action btn-action-blue" onclick="addRack()"><i class="fa-solid fa-plus"></i> Add Rack</button></div>
+        <div id="admRacksContainer"></div>
+      </div>
+
+      <!-- BOOK INVENTORY -->
+      <div class="content-section" id="section-books">
+        <div class="section-header">
+          <div><h1><i class="fa-solid fa-book"></i> Book Inventory</h1><p>Full catalogue with borrow status.</p></div>
+          <div class="header-actions">
+            <div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="admBookSearch" placeholder="Search books…" oninput="renderAdminBooks()"/></div>
+            <button class="btn-action btn-action-blue" onclick="openAddBook()"><i class="fa-solid fa-plus"></i> Add Book</button>
+          </div>
+        </div>
+        <div class="zone-tabs" id="admBookCatTabs"></div>
+        <div class="card" id="admBooksTable"></div>
+      </div>
+
+      <!-- ACTIVE USERS -->
+      <div class="content-section" id="section-users">
+        <div class="section-header"><div><h1><i class="fa-solid fa-users"></i> Active Users</h1><p>Students currently in the library.</p></div></div>
+        <div class="users-grid" id="usersGrid"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SEAT MODAL -->
+<div class="modal-overlay hidden" id="admSeatModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('admSeatModal')"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-seat-icon" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);border-color:#c4b5fd"><i class="fa-solid fa-chair" style="color:#7c3aed"></i></div>
+    <h2 class="modal-title" id="admMTitle">Seat</h2>
+    <p class="modal-desc" id="admMDesc"></p>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px" id="admMStudent"></p>
+    <div class="admin-status-btns">
+      <button class="status-btn status-btn-green" onclick="setStatus('available')"><i class="fa-solid fa-circle-check"></i> Available</button>
+      <button class="status-btn status-btn-yellow" onclick="setStatus('reserved')"><i class="fa-solid fa-clock"></i> Reserved</button>
+      <button class="status-btn status-btn-red" onclick="setStatus('occupied')"><i class="fa-solid fa-user-check"></i> Occupied</button>
+    </div>
+    <div class="qr-wrap" style="margin-top:16px"><div class="qr-box"><div class="qr-grid" id="admQrGrid"></div><span class="qr-lbl" id="admQrLbl">QR</span></div></div>
+  </div>
+</div>
+
+<!-- ADD BOOK MODAL -->
+<div class="modal-overlay hidden" id="addBookModal">
+  <div class="modal-box" style="text-align:left">
+    <button class="modal-close" onclick="closeModal('addBookModal')"><i class="fa-solid fa-xmark"></i></button>
+    <h2 class="modal-title" style="margin-bottom:20px">Add New Book</h2>
+    <div style="margin-bottom:14px"><label style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px;margin-bottom:6px"><i class="fa-solid fa-book" style="color:var(--blue-400)"></i>Title</label><input style="width:100%;padding:11px 14px;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:10px;font-size:14px;font-family:inherit;outline:none;color:var(--text-dark)" id="nbTitle" type="text" placeholder="Book title"/></div>
+    <div style="margin-bottom:14px"><label style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px;margin-bottom:6px"><i class="fa-solid fa-user-pen" style="color:var(--blue-400)"></i>Author</label><input style="width:100%;padding:11px 14px;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:10px;font-size:14px;font-family:inherit;outline:none;color:var(--text-dark)" id="nbAuthor" type="text" placeholder="Author name"/></div>
+    <div style="margin-bottom:14px"><label style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px;margin-bottom:6px"><i class="fa-solid fa-layer-group" style="color:var(--blue-400)"></i>Rack</label><select style="width:100%;padding:11px 14px;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:10px;font-size:14px;font-family:inherit;outline:none;color:var(--text-dark)" id="nbRack"></select></div>
+    <button onclick="addBook()" style="width:100%;padding:13px;background:linear-gradient(135deg,var(--blue-600),var(--blue-500));color:white;border-radius:10px;font-family:inherit;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;transition:var(--trans)"><i class="fa-solid fa-plus"></i>Add Book</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../js/data.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/admin.js"></script>
+
+</body>
+</html>

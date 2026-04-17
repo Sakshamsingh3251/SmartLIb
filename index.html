@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SmartLib — Intelligent Library System</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+
+  
+<nav class="navbar dark" id="navbar">
+  <div class="nav-brand">
+    <div class="nav-logo"><i class="fa-solid fa-building-columns"></i></div>
+    <div class="nav-title">Smart<span>Lib</span></div>
+  </div>
+ 
+  <div class="nav-actions">
+    <button class="btn-outline" onclick="location.href='pages/login.html'">
+      <i class="fa-solid fa-arrow-right-to-bracket"></i> Log in
+    </button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+</nav>
+
+
+
+
+
+<section class="hero bg-hero">
+  <div class="hero-shape shape1"></div>
+  <div class="hero-shape shape2"></div>
+  <div class="hero-inner">
+    <div class="hero-pill">
+      <i class="fa-solid fa-circle-dot"></i>
+      Smart Library Management
+    </div>
+    <h1 class="hero-title">
+      Reserve seats.<br>
+      Track books.<br>
+      <span class="hl">All in one place.</span>
+    </h1>
+    
+    <div class="hero-btns">
+      <button class="btn-hero btn-hero-ghost" onclick="location.href='pages/login.html'">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i> Log in
+      </button>
+    </div>
+    
+    
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+<script>
+function toggleMobileMenu() {
+  const m = document.getElementById('mobileMenu');
+  m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+window.addEventListener('scroll', () => {
+  const n = document.getElementById('navbar');
+  n.style.background = window.scrollY > 60 ? 'rgba(10,22,40,0.97)' : 'rgba(10,22,40,0.0)';
+  if (window.scrollY < 10) n.style.background = '';
+});
+const obs = new IntersectionObserver(e => e.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); }), { threshold:0.12 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

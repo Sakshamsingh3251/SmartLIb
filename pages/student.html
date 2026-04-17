@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SmartLib — Student Portal</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="dash-layout">
+  <button class="mob-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo"><i class="fa-solid fa-building-columns"></i></div>
+      <div class="sidebar-name">Smart<span>Lib</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Student Menu</div>
+      <a href="#" class="nav-item active" onclick="showSection('seats',this)"><i class="fa-solid fa-chair"></i><span>Find a Seat</span></a>
+      <a href="#" class="nav-item" onclick="showSection('books',this)"><i class="fa-solid fa-book-open"></i><span>Browse Books</span></a>
+      <a href="#" class="nav-item" onclick="showSection('mybookings',this)"><i class="fa-solid fa-calendar-check"></i><span>My Bookings</span><span class="nav-badge" id="bookBadge" style="display:none">0</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div><div class="user-name" id="stuNameDisplay">Student</div><div class="user-role-badge">Student Account</div></div>
+      </div>
+      <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+  </aside>
+
+  <div class="dash-main">
+    <div class="topbar">
+      <div class="topbar-left"><div class="page-title" id="pageTitle">Find a Seat</div></div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i></button>
+        <button class="topbar-icon-btn" onclick="logout()" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </div>
+
+    <div class="dash-content">
+
+      <div class="content-section active" id="section-seats">
+        <div class="section-header">
+          <div><h1><i class="fa-solid fa-chair"></i> Find a Seat</h1><p>Click any available seat to reserve it. A 10-minute hold will be placed automatically.</p></div>
+          <div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="seatSearch" placeholder="Search seat or zone…" oninput="filterSeats()"/></div>
+        </div>
+        <div class="legend"><span class="legend-item"><span class="legend-dot ld-green"></span>Available</span><span class="legend-item"><span class="legend-dot ld-yellow"></span>Reserved (hold)</span><span class="legend-item"><span class="legend-dot ld-red"></span>Occupied</span></div>
+        <div class="zone-tabs" id="zoneTabs"></div>
+        <div class="seat-grid" id="seatGrid"></div>
+      </div>
+
+      <!-- BOOKS SECTION -->
+      <div class="content-section" id="section-books">
+        <div class="section-header">
+          <div><h1><i class="fa-solid fa-book-open"></i> Browse Books</h1><p>Search books by title, author or genre. Available books can be borrowed at the front desk.</p></div>
+          <div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="bookSearch" placeholder="Search title, author, genre…" oninput="filterBooks()"/></div>
+        </div>
+        <div class="zone-tabs" id="bookCatTabs"></div>
+        <div id="racksContainer"></div>
+      </div>
+
+      <!-- MY BOOKINGS -->
+      <div class="content-section" id="section-mybookings">
+        <div class="section-header"><div><h1><i class="fa-solid fa-calendar-check"></i> My Bookings</h1><p>Your active reservations and recent booking history.</p></div></div>
+        <div id="bookingsList"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal-overlay hidden" id="reserveModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('reserveModal')"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-seat-icon"><i class="fa-solid fa-chair"></i></div>
+    <h2 class="modal-title" id="mTitle">Reserve Seat</h2>
+    <p class="modal-desc" id="mDesc">Zone — Amenities</p>
+    <div class="timer-wrap">
+      <svg class="timer-svg" viewBox="0 0 96 96"><circle class="ring-bg" cx="48" cy="48" r="36"/><circle class="ring-fill" cx="48" cy="48" r="36" id="ringFill"/></svg>
+      <div class="timer-inner"><span class="timer-num" id="timerNum">10:00</span><span class="timer-lbl">hold</span></div>
+    </div>
+    <p class="modal-info"><i class="fa-solid fa-circle-info"></i> Walk to the seat and scan the QR code below to confirm your check-in before time runs out.</p>
+    <div class="qr-wrap"><div class="qr-box"><div class="qr-grid" id="qrGrid"></div><span class="qr-lbl" id="qrLbl">QR Code</span></div></div>
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="cancelRes()"><i class="fa-solid fa-ban"></i> Cancel</button>
+      <button class="btn-modal-confirm" onclick="confirmCheckin()"><i class="fa-solid fa-check"></i> Check In</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../js/data.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/student.js"></script>
+
+
+</body>
+</html>

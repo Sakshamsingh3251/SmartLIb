@@ -1,0 +1,263 @@
+================================================================================
+                    SMARTLIB - HOW TO RUN (5 STEPS)
+================================================================================
+
+STEP 1: COPY PROJECT TO XAMPP
+================================================================================
+Copy the entire smartlib folder from:
+  FROM: d:\saksham_project\smartlib\
+  TO:   C:\xampp\htdocs\smartlib\
+
+If C:\xampp\htdocs\ doesn't exist, your XAMPP installation is in a different 
+location. Find where XAMPP is installed and copy to [XAMPP_PATH]\htdocs\smartlib\
+
+
+STEP 2: START XAMPP SERVICES
+================================================================================
+1. Open XAMPP Control Panel
+   (Usually: C:\xampp\xampp-control.exe)
+
+2. Click "Start" button next to "Apache"
+   - Wait until it shows "running" (green)
+
+3. Click "Start" button next to "MySQL"
+   - Wait until it shows "running" (green)
+
+IMPORTANT: Both Apache AND MySQL must be running!
+
+
+STEP 3: CREATE AND SETUP DATABASE (Takes ~2 minutes)
+================================================================================
+1. Open your browser and go to:
+   http://localhost/phpmyadmin/
+
+2. Look at left side panel, find "New" button
+   Click on "New"
+
+3. Enter database name:
+   Database name: smartlib_v2
+
+4. Find "Collation" dropdown
+   Select: utf8mb4_unicode_ci
+
+5. Click blue "Create" button
+   Wait for success message
+
+6. Now go to "Import" tab at top
+
+7. Click "Choose File" button
+
+8. Navigate to: d:\saksham_project\smartlib\backend\
+   Select: database.sql
+   Click "Open"
+
+9. Scroll down to the bottom of the import page
+
+10. Look for the blue "Import" button at the bottom right
+    (In some phpMyAdmin versions it may say "Go" or have a play icon ▶)
+    Click this button to start the import
+
+11. Wait for success message "Import has been successfully finished"
+    This may take 30-60 seconds
+
+12. Database is now ready!
+
+
+STEP 4: OPEN THE APPLICATION
+================================================================================
+Open your web browser and go to:
+
+  http://localhost/smartlib/
+
+You should see the SmartLib landing page with:
+- SmartLib logo/title
+- "Find a Seat" button
+- "Browse Books" button
+- Login link
+
+If you see this, everything is working!
+
+
+STEP 5: LOGIN AND TEST
+================================================================================
+
+OPTION A: LOGIN AS STUDENT
+------------------------
+1. Click the login link or go to:
+   http://localhost/smartlib/pages/login.html
+
+2. Make sure "Student" tab is selected
+
+3. Enter:
+   Student ID: student
+   Password: 1234
+
+4. Click "Login"
+
+5. Try these features:
+   - Click "Find a Seat" - see all available seats
+   - Click on any green seat to book it
+   - Watch the 10-minute timer countdown
+   - Click "Check In" when ready
+   - See it in "My Bookings"
+
+
+OPTION B: LOGIN AS ADMIN
+------------------------
+1. Go to: http://localhost/smartlib/pages/login.html
+
+2. Click "Admin" tab at top
+
+3. Enter:
+   Admin Username: admin
+   Password: admin
+   Admin Key: 123456
+
+4. Click "Login"
+
+5. You will see the admin dashboard with:
+   - Real-time statistics
+   - All seats on map
+   - Booking history
+   - User management
+   - Book inventory
+
+6. Try these features:
+   - Click any seat to see details
+   - Change seat status (Available/Reserved/Occupied)
+   - View all active users
+   - See booking statistics
+
+
+================================================================================
+WHAT YOU SHOULD SEE AFTER EACH STEP
+================================================================================
+
+After Step 1 (Copy):
+✓ Folder exists at C:\xampp\htdocs\smartlib\
+✓ You can see: pages/, js/, css/, api/, backend/ folders inside
+
+After Step 2 (Services):
+✓ XAMPP Control Panel shows Apache as "running" (green)
+✓ XAMPP Control Panel shows MySQL as "running" (green)
+
+After Step 3 (Database):
+✓ phpMyAdmin shows "smartlib_v2" in left panel
+✓ You see success message "Import has been successfully finished"
+✓ No errors displayed during import
+
+After Step 4 (Open):
+✓ Browser shows SmartLib landing page
+✓ No 404 errors
+✓ Page loads with styling (colored buttons, nice layout)
+
+After Step 5 (Test):
+✓ Can login with student/1234
+✓ Can see seats and book them
+✓ Timer counts down from 10:00
+✓ Can login with admin/admin/123456
+✓ Admin dashboard shows statistics and seat grid
+
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+PROBLEM: "Cannot connect to server"
+SOLUTION: 
+- Check Apache is running (green in XAMPP)
+- Check MySQL is running (green in XAMPP)
+- Try closing and opening again
+
+PROBLEM: "Access Denied" when importing database
+SOLUTION:
+- Make sure MySQL is running
+- Check username/password in phpmyadmin (default: root / [no password])
+
+PROBLEM: "404 Not Found" error
+SOLUTION:
+- Verify files are in C:\xampp\htdocs\smartlib\
+- Restart Apache in XAMPP
+- Clear browser cache (Ctrl+Shift+Delete)
+
+PROBLEM: Cannot login even with correct credentials
+SOLUTION:
+- Verify database was imported successfully
+- Check MySQL is running
+- Try login with exact credentials:
+  Student: student / 1234
+  Admin: admin / admin / 123456
+
+PROBLEM: "API Error" message
+SOLUTION:
+- Check Apache is running
+- Check MySQL is running
+- Verify backend/config.php has correct database name (smartlib_v2)
+
+PROBLEM: Seats not showing or bookings not saving
+SOLUTION:
+- Check MySQL is running
+- Verify database.sql was imported completely
+- Check browser console for errors (F12 key)
+
+
+================================================================================
+ADDITIONAL INFORMATION
+================================================================================
+
+DEMO DATA INCLUDED:
+- 6 Student accounts (student, STU001, STU002, STU003, STU004, STU005)
+- 1 Admin account
+- 24 seats across 4 zones
+- 20 books in 6 racks
+- Ready to test immediately
+
+ACCESSING PHPMYADMIN:
+- URL: http://localhost/phpmyadmin/
+- Username: root
+- Password: (usually blank)
+- You can view/edit database here
+
+ACCESSING LOCALHOST:
+- Main site: http://localhost/smartlib/
+- Login page: http://localhost/smartlib/pages/login.html
+- Other URLs may show 404 (that's normal)
+
+FILES AND FOLDERS:
+- index.html = Landing page
+- pages/ = Login, Student, Admin pages
+- js/ = JavaScript code (app.js, student.js, admin.js, data.js)
+- css/ = Styling (style.css)
+- api/ = Backend API files (auth.php, seats.php, books.php, bookings.php)
+- backend/ = Database config (config.php, database.sql)
+
+MORE DOCUMENTATION:
+- README.md = Project overview
+- QUICK_START.md = Quick setup guide
+- PROJECT_GUIDE.md = Complete documentation
+- SYSTEM_OVERVIEW.md = How system works
+- INTEGRATION_SUMMARY.md = Technical details
+
+
+================================================================================
+YOU'RE READY TO GO!
+================================================================================
+
+That's all! Your SmartLib is now running. You have:
+
+✓ Complete frontend (HTML + CSS + JavaScript)
+✓ Complete backend (PHP API)
+✓ Complete database (MySQL)
+✓ Real-time seat booking system
+✓ 10-minute countdown timer
+✓ Admin controls
+✓ Book management
+✓ User authentication
+
+Start exploring and testing!
+
+For questions, read the documentation files in the project folder.
+
+Good luck! 🚀
+
+================================================================================
